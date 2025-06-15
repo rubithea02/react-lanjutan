@@ -8,10 +8,14 @@ import AdminGenres from "./pages/admin/genres";
 import AdminGenresCreate from "./pages/admin/genres/create";
 import AdminAuthors from "./pages/admin/authors";
 import AdminAuthorsCreate from "./pages/admin/authors/create";
-import Login from "./pages/auth/login"; 
-import Register from "./pages/auth/register"; 
+import Login from "./pages/auth/login";
+import Register from "./pages/auth/register";
 import AdminLayout from "./layouts/admin";
 import Dashboard from "./pages/admin";
+import BookEdit from "./pages/admin/books/edit";
+import ShowBook from "./pages/public/books/show";
+import GenreEdit from "./pages/admin/genres/edit";
+import AuthorEdit from "./pages/admin/authors/edit";
 
 function App() {
   return (
@@ -21,7 +25,10 @@ function App() {
           {/* Public */}
           <Route element={<PublicLayout />}>
             <Route index element={<Home />} />
-            <Route path="books" element={<Books />} />
+            <Route path="books">
+              <Route index element={<Books />} />
+              <Route path="show/:id" element={<ShowBook />} />
+            </Route>
           </Route>
 
           {/* Auth */}
@@ -36,18 +43,21 @@ function App() {
             <Route path="books">
               <Route index element={<AdminBooks />} />
               <Route path="create" element={<BookCreate />} />
+              <Route path="edit/:id" element={<BookEdit />} />
             </Route>
 
             {/* Genres */}
             <Route path="genres">
               <Route index element={<AdminGenres />} />
               <Route path="create" element={<AdminGenresCreate />} />
+              <Route path="edit/:id" element={<GenreEdit />} />
             </Route>
 
             {/* Authors */}
             <Route path="authors">
               <Route index element={<AdminAuthors />} />
               <Route path="create" element={<AdminAuthorsCreate />} />
+              <Route path="edit/:id" element={<AuthorEdit />} />
             </Route>
           </Route>
         </Routes>

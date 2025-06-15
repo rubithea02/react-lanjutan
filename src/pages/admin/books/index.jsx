@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBooks } from "../../../_services/books";
+import { deleteBook, getBooks } from "../../../_services/books";
 import { getGenres } from "../../../_services/genres";
 import { getAuthors } from "../../../_services/authors";
 import { Link } from "react-router-dom";
@@ -43,6 +43,19 @@ export default function AdminBooks() {
     setOpenDropdownId(openDropdownId === id ? null : id);
   };
 
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this book?");
+  
+    if (confirmDelete) {
+      try {
+        await deleteBook(id);
+        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+      } catch (error) {
+        console.error("Failed to delete book:", error);
+      }
+    }
+  };
+  
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">

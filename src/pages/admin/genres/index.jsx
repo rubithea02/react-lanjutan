@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getGenres } from "../../../_services/genres";
+import { getGenres, deleteGenre } from "../../../_services/genres";
 import { Link } from "react-router-dom";
+import { FiEdit, FiTrash } from "react-icons/fi";
 
 export default function AdminGenres() {
   const [genres, setGenres] = useState([]);
@@ -17,6 +18,18 @@ export default function AdminGenres() {
 
     fetchData();
   }, []);
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this genre?");
+    if (confirmDelete) {
+      try {
+        await deleteGenre(id);
+        setGenres((prevGenres) => prevGenres.filter((genre) => genre.id !== id));
+      } catch (error) {
+        console.error("Failed to delete genre:", error);
+      }
+    }
+  };
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -37,16 +50,41 @@ export default function AdminGenres() {
                 <th className="px-4 py-3">ID</th>
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Description</th>
+                <th className="px-4 py-3">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {genres.map((genre) => (
-                <tr key={genre.id} className="border-b dark:border-gray-700">
-                  <td className="px-4 py-3">{genre.id}</td>
-                  <td className="px-4 py-3">{genre.name}</td>
-                  <td className="px-4 py-3">{genre.description}</td>
+              {genres.length > 0 ? (
+                genres.map((genre) => (
+                  <tr key={genre.id} className="border-b dark:border-gray-700">
+                    <td className="px-4 py-3">{genre.id}</td>
+                    <td className="px-4 py-3">{genre.name}</td>
+                    <td className="px-4 py-3">{genre.description}</td>
+                    <td className="px-4 py-3 flex items-center gap-3">
+                      <Link
+                        to={`/admin/genres/edit/${genre.id}`}
+                        className="text-blue-500 hover:text-blue-700"
+                        title="Edit"
+                      >
+                        <FiEdit size={18} />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(genre.id)}
+                        className="text-red-500 hover:text-red-700"
+                        title="Delete"
+                      >
+                        <FiTrash size={18} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="px-4 py-3 text-center">
+                    Data genre tidak ditemukan
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
