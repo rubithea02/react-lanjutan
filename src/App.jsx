@@ -16,6 +16,8 @@ import BookEdit from "./pages/admin/books/edit";
 import ShowBook from "./pages/public/books/show";
 import GenreEdit from "./pages/admin/genres/edit";
 import AuthorEdit from "./pages/admin/authors/edit";
+import SignOut from "./pages/auth/SignOut";
+import PublicOnlyRoute from "./components/PublicOnlyRoute";
 
 function App() {
   return (
@@ -32,8 +34,24 @@ function App() {
           </Route>
 
           {/* Auth */}
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route
+            path="login"
+            element={
+              <PublicOnlyRoute>
+                <Login />
+              </PublicOnlyRoute>
+            }
+          />
+          <Route
+            path="register"
+            element={
+              <PublicOnlyRoute>
+                <Register />
+              </PublicOnlyRoute>
+            }
+          />
+
+          <Route path="signout" element={<SignOut />} />
 
           {/* Admin */}
           <Route path="admin" element={<AdminLayout />}>
